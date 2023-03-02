@@ -1,0 +1,5 @@
+230322开始该项目,因为nodejs对目前就业帮助不大,不值得花2星期重新学
+另外nodejs的弱类型会导致开发很麻烦
+
+首先在initializr上初始化项目,选了spring3和java19结果conversation.java中报错,找不到json类型
+把spring改回2.7.7好了
