@@ -28,24 +28,23 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
-
-    @Autowired
-    SpeechService speechService;
-
-
     @Autowired
     private UsermRepository usermRepository;
-
     @Autowired
     private ConversationRepository conversationRepository;
-    @Autowired
-    ConversationService conversationService;
 
     public void processUsermMessage(UsermMessageDTO usermMessageDTO) {
         log.info("received msg: {}", usermMessageDTO.toString());
+        var responseEntity = requestChatGPT(usermMessageDTO);
+        var responseBody = responseEntity.getBody();
+        log.info("responseBody: {}", responseBody);
+        updateConversationWithMessage(usermMessageDTO.getUsermId(), responseBody);
+    }
+
+    private ResponseEntity<String> requestChatGPT(UsermMessageDTO usermMessageDTO) {
         // 获取url和key
         String endpointUrl = "https://api.openai.com/v1/chat/completions";
-        String apiKey = "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";
+        String apiKey = "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";
         // 设置header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -60,28 +59,15 @@ public class ChatService {
         // 发送请求
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(endpointUrl, requestEntity, String.class);
-        String responseBody = responseEntity.getBody();
-        log.info("responseBody: {}", responseBody);
-        updateConversationWithMessage(usermMessageDTO.getUsermId(), responseBody);
-        //appendNewReply(usermMessageDTO.getUsermId(), responseBody);
-        //speechService.parseReplyMessage(responseBody);
+        return responseEntity;
     }
 
-    private void appendNewReply(long usermId, String responseBody) throws JsonProcessingException {
-        // 先读到回复的message结构体json
-        ObjectMapper objectMapper = new ObjectMapper();
-        ChatCompletionJson chatCompletionJson = objectMapper.readValue(responseBody, ChatCompletionJson.class);
-        ChatCompletionJson.Choice.Message newMessage = chatCompletionJson.getChoices()[0].getMessage();
-        log.info("received message content: {}", newMessage.getRole(), newMessage.getContent());
-        // 再从数据库里读到该用户的聊天记录
-    }
-
-    public void updateConversationWithMessage(Long usermId, String responseBody) {
+    private void updateConversationWithMessage(Long usermId, String responseBody) {
         // retrieve the userm entity with the given usermId
         Userm userm = usermRepository.findById(usermId).get();
 
         // retrieve the conversation entity that the user belongs to
-        var conversation = conversationService.getOrCreateConversationByUsermId(usermId);
+        var conversation = conversationRepository.getOrCreateConversationByUsermId(usermId);
 
         // retrieve the message value from the JSON string responseBody
         JsonNode rootNode = null;
