@@ -15,10 +15,8 @@ public class Userm {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long id;
+
     private String name;
     private String password;
-
-    @ManyToMany(mappedBy = "userms")
-    private Set<Conversation> conversations = new HashSet<>();
 
 }

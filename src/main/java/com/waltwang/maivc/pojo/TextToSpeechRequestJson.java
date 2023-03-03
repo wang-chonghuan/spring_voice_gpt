@@ -4,7 +4,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TextToSpeechRequest {
+public class TextToSpeechRequestJson {
     private AudioConfig audioConfig;
     private Input input;
     private Voice voice;

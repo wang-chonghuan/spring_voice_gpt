@@ -25,19 +25,9 @@ public class Conversation {
     @Column
     private Long id;
 
+    private Long usermId;
+
     @Type(type = "json")
     @Column(name = "messages", columnDefinition = "json")
     private Map<String,Object> messages = new HashMap<>();
-
-    @Type(type = "json")
-    @Column(name = "model_parameters", columnDefinition = "json")
-    private Map<String,Object> modelParameters = new HashMap<>();
-
-    @ManyToMany(cascade = CascadeType.MERGE)
-    @JoinTable(
-            name = "CONVERSATION_USERM_RELATION",
-            joinColumns = @JoinColumn(name = "CONVERSATION_ID"),
-            inverseJoinColumns = @JoinColumn(name = "USERM_ID")
-    )
-    private Set<Userm> userms = new HashSet<>();
 }
