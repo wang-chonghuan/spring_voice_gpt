@@ -21,3 +21,11 @@ public class ChatRequest {
         private String content;
     }
 }
+
+/*
+{
+  "model": "gpt-3.5-turbo",
+  "messages": [{"role": "user", "content": "Hello!"}]
+}
+https://platform.openai.com/docs/api-reference/chat/create
+ */

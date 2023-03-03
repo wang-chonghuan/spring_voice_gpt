@@ -6,6 +6,7 @@ import com.waltwang.maivc.pojo.ChatRequest;
 import com.waltwang.maivc.pojo.UsermMessageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,11 +22,14 @@ import java.util.Arrays;
 @Service
 @RequiredArgsConstructor
 public class ChatService {
+
+    @Autowired
+    SpeechService speechService;
     public void processUsermMessage(UsermMessageDTO usermMessageDTO) throws JsonProcessingException {
         log.info("received msg: {}", usermMessageDTO.toString());
         // 获取url和key
         String endpointUrl = "https://api.openai.com/v1/chat/completions";
-        String apiKey = "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";
+        String apiKey = "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";
         // 设置header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -33,7 +37,7 @@ public class ChatService {
         // 设置消息内容
         ChatRequest chatRequest = new ChatRequest(
                 "gpt-3.5-turbo",
-                Arrays.asList(new ChatRequest.Message("user", "Hello!"))
+                Arrays.asList(new ChatRequest.Message("user", "你好，你是谁？"))
         );
         HttpEntity<ChatRequest> requestEntity = new HttpEntity<>(chatRequest, headers);
         log.info("requestBody: {}", requestEntity.toString());
@@ -42,5 +46,6 @@ public class ChatService {
         ResponseEntity<String> responseEntity = restTemplate.postForEntity(endpointUrl, requestEntity, String.class);
         String responseBody = responseEntity.getBody();
         log.info("responseBody: {}", responseBody);
+        speechService.parseReplyMessage(responseBody);
     }
 }
