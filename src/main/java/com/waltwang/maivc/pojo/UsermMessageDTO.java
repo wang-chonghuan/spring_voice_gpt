@@ -1,12 +1,15 @@
 package com.waltwang.maivc.pojo;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
-import lombok.Value;
 
-@Value
+@Data
 @ToString
-// @ToString(exclude = "age")
+@AllArgsConstructor
+@NoArgsConstructor
 public class UsermMessageDTO {
     long usermId;
-    String message;
+    Message message;
 }

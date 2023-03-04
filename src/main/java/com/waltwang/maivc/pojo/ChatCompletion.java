@@ -3,7 +3,7 @@ package com.waltwang.maivc.pojo;
 import lombok.Data;
 
 @Data
-public class ChatCompletionJson {
+public class ChatCompletion {
     private String id;
     private String object;
     private long created;
@@ -23,12 +23,6 @@ public class ChatCompletionJson {
         private Message message;
         private String finish_reason;
         private int index;
-
-        @Data
-        public static class Message {
-            private String role;
-            private String content;
-        }
     }
 }
 
