@@ -1,6 +1,7 @@
 package com.waltwang.maivc.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.waltwang.maivc.pojo.Message;
 import com.waltwang.maivc.pojo.UsermMessageDTO;
 import com.waltwang.maivc.service.ChatService;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class ChatController {
 
     @RequestMapping(value="/message", method= RequestMethod.POST)
     public ResponseEntity<?> usermMessage(@RequestBody @Valid UsermMessageDTO usermMessageDTO) throws JsonProcessingException {
-        chatService.processUsermMessage(usermMessageDTO);
-        return ResponseEntity.ok().body("");
+        Message message = chatService.processUsermMessage(usermMessageDTO);
+        return ResponseEntity.ok().body(message);
     }
 }

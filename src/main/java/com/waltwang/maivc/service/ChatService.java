@@ -56,8 +56,9 @@ public class ChatService {
 
     private ResponseEntity<String> requestChatGPT(ChatRequest chatRequest) {
         // 获取url和key
+        // 在这里重新申请 https://platform.openai.com/account/api-keys
         String endpointUrl = "https://api.openai.com/v1/chat/completions";
-        String apiKey = "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";
+        String apiKey = "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";
         // 设置header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
