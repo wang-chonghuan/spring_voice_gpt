@@ -29,4 +29,9 @@ public class ChatController {
         Message message = chatService.processUsermMessage(usermMessageDTO);
         return ResponseEntity.ok().body(message);
     }
+    // http://localhost:8080/chat/healthcheck
+    @RequestMapping(value = "/healthcheck", method = RequestMethod.GET)
+    public ResponseEntity<?> healthCheck() {
+        return ResponseEntity.ok().body("ShellGPT service is running");
+    }
 }

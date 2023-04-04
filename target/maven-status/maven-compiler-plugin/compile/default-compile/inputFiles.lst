@@ -1,0 +1,12 @@
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\ChatRequest.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\repository\UsermRepository.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\service\ChatService.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\UsermMessageDTO.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\MaivcApplication.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\configuration\WebConfiguration.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\controller\ChatController.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\domain\Userm.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\ChatCompletion.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\Message.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\domain\Conversation.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\repository\ConversationRepository.java

@@ -1,0 +1,24 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+    include-binding-errors: always
+
+logging:
+  level:
+    root: INFO
+
+spring:
+  datasource:
+    url: jdbc:postgresql://shellgpt-server.postgres.database.azure.com:5432/shellgpt-db?user=walt&password=dB@92815&sslmode=require
+    username: walt@shellgpt-server
+    password: dB@92815
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
