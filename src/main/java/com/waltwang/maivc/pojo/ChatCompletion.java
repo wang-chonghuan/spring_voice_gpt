@@ -20,7 +20,7 @@ public class ChatCompletion {
 
     @Data
     public static class Choice {
-        private Message message;
+        private MessageApi message;
         private String finish_reason;
         private int index;
     }

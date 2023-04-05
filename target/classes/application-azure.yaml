@@ -14,6 +14,7 @@ spring:
     username: walt@shellgpt-server
     password: dB@92815
     driver-class-name: org.postgresql.Driver
+
   jpa:
     generate-ddl: true
     show-sql: true

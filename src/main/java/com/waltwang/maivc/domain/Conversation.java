@@ -26,6 +26,7 @@ public class Conversation {
     private Long id;
 
     private Long usermId;
+    private String sessionId;
 
     @Type(type = "json")
     @Column(name = "messages", columnDefinition = "json")

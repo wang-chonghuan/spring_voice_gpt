@@ -11,13 +11,14 @@ import java.util.List;
 import java.util.Map;
 
 public interface ConversationRepository extends JpaRepository<Conversation, Long> {
-    Conversation findFirstByUsermId(Long usermId);
+    Conversation findFirstByUsermIdAndSessionId(Long usermId, String sessionId);
 
-    default public Conversation getOrCreateConversationByUsermId(Long usermId) {
-        var conv = this.findFirstByUsermId(usermId);
+    default public Conversation getOrCreateConversation(Long usermId, String sessionId) {
+        var conv = this.findFirstByUsermIdAndSessionId(usermId, sessionId);
         if(conv == null) {
             var newConv = new Conversation();
             newConv.setUsermId(usermId);
+            newConv.setSessionId(sessionId);
             Map<String, Object> messages = new HashMap<>();
             messages.put("messages", Collections.emptyList());
             newConv.setMessages(messages);

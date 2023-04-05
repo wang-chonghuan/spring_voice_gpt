@@ -6,8 +6,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waltwang.maivc.domain.Conversation;
 import com.waltwang.maivc.domain.Userm;
 import com.waltwang.maivc.pojo.ChatRequest;
-import com.waltwang.maivc.pojo.Message;
-import com.waltwang.maivc.pojo.UsermMessageDTO;
+import com.waltwang.maivc.pojo.MessageApi;
+import com.waltwang.maivc.pojo.MessageBody;
 import com.waltwang.maivc.repository.ConversationRepository;
 import com.waltwang.maivc.repository.UsermRepository;
 import lombok.RequiredArgsConstructor;
@@ -37,19 +37,18 @@ public class ChatService {
      * 3. 把新聊天记录发给gpt
      * 4. 把gpt的回复合并进聊天记录,存入DB
      * 5. 把新回复发给用户
-     * @param usermMessageDTO
      */
-    public Message processUsermMessage(UsermMessageDTO usermMessageDTO) {
+    public MessageBody processUsermMessage(MessageBody msgBody) {
         // 1. 从DB读取聊天记录
-        log.info("received msg: {}", usermMessageDTO.toString());
-        Conversation conversation = findConversation(usermMessageDTO.getUsermId());
+        log.info("received msg: {}", msgBody.toString());
+        Conversation conversation = findConversation(msgBody.getUsermId(), msgBody.getSessionId());
         // 2. 把用户消息合并进聊天记录
-        updateConversationByMessage(usermMessageDTO.getMessage(), conversation);
+        updateConversationByMessage(msgBody, conversation);
         // 3. 把新聊天记录发给gpt
         var responseBody = requestChatGPT(new ChatRequest(conversation)).getBody();
         log.info("responseBody: {}", responseBody);
         // 4. 把gpt的回复合并进聊天记录
-        var responseMessage = saveConversation(responseBody, conversation);
+        var responseMessage = saveConversation(responseBody, conversation, msgBody);
         // 5. 把新回复发给用户
         return responseMessage;
     }
@@ -72,23 +71,24 @@ public class ChatService {
         return responseEntity;
     }
 
-    private Conversation findConversation(long usermId) {
+    private Conversation findConversation(long usermId, String sessionId) {
         Userm userm = usermRepository.findById(usermId).get();
-        Conversation conversation = conversationRepository
-                .getOrCreateConversationByUsermId(userm.getId());
+        Conversation conversation = conversationRepository.getOrCreateConversation(userm.getId(), sessionId);
         return conversation;
     }
 
-    private void updateConversationByMessage(Message message, Conversation conversation) {
+    // 把当前收到的消息变成json,加入数据库里的聊天记录里，放到Conversation里，但是还没提交
+    private void updateConversationByMessage(MessageBody msgBody, Conversation conversation) {
         // append json to json list
         Map<String, Object> messages = conversation.getMessages();
         List<Map<String, Object>> newMessageList = new ArrayList<>(
                 (List<Map<String, Object>>) messages.get("messages"));
-        newMessageList.add(new ObjectMapper().convertValue(message, Map.class));
+        newMessageList.add(new ObjectMapper().convertValue(msgBody, Map.class));
         messages.put("messages", newMessageList);
     }
 
-    private Message findMessage(String responseBody) {
+    // 从gpt-api返回的结构里取出MessageApi
+    private MessageApi findMessageFromApi(String responseBody) {
         // retrieve the message value from the JSON string responseBody
         JsonNode rootNode = null;
         try {
@@ -97,14 +97,22 @@ public class ChatService {
             throw new RuntimeException(e);
         }
         JsonNode messageJsonNode = rootNode.path("choices").get(0).path("message");
-        Message message = new ObjectMapper().convertValue(messageJsonNode, Message.class);
+        MessageApi message = new ObjectMapper().convertValue(messageJsonNode, MessageApi.class);
         return message;
     }
 
-    private Message saveConversation(String responseBody, Conversation conversation) {
-        var message = findMessage(responseBody);
-        updateConversationByMessage(message, conversation);
+    // 根据返回值生成recvMsgBody并且保存在数据库里，再返回出去
+    private MessageBody saveConversation(String responseBody, Conversation conversation, MessageBody sendMsgBody) {
+        var msgApi = findMessageFromApi(responseBody);
+        MessageBody recvMsgBody = new MessageBody(
+                sendMsgBody.getUsermId(),
+                msgApi.getRole(),
+                msgApi.getContent(),
+                System.currentTimeMillis(),
+                sendMsgBody.getSessionId()
+        );
+        updateConversationByMessage(recvMsgBody, conversation);
         conversationRepository.save(conversation);
-        return message;
+        return recvMsgBody;
     }
 }

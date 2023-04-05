@@ -1,8 +1,7 @@
 package com.waltwang.maivc.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.waltwang.maivc.pojo.Message;
-import com.waltwang.maivc.pojo.UsermMessageDTO;
+import com.waltwang.maivc.pojo.MessageBody;
 import com.waltwang.maivc.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,9 +24,9 @@ public class ChatController {
     ChatService chatService;
 
     @RequestMapping(value="/message", method= RequestMethod.POST)
-    public ResponseEntity<?> usermMessage(@RequestBody @Valid UsermMessageDTO usermMessageDTO) throws JsonProcessingException {
-        Message message = chatService.processUsermMessage(usermMessageDTO);
-        return ResponseEntity.ok().body(message);
+    public ResponseEntity<?> sendMessage(@RequestBody @Valid MessageBody messageBody) throws JsonProcessingException {
+        MessageBody recvMsgBody = chatService.processUsermMessage(messageBody);
+        return ResponseEntity.ok().body(recvMsgBody);
     }
     // http://localhost:8080/chat/healthcheck
     @RequestMapping(value = "/healthcheck", method = RequestMethod.GET)

@@ -6,7 +6,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Message {
+public class MessageApi {
     private String role;
     private String content;
 }
