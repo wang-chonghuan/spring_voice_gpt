@@ -4,11 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.stereotype.Service;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @AllArgsConstructor
@@ -21,7 +18,21 @@ public class Userm {
     @Column
     private Long id;
 
-    private String name;
+    @Column(nullable = false, unique = true)
+    private String username;
+
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String role;
+
+    public Userm(String username,
+                 String password,
+                 String role) {
+        super();
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
 }

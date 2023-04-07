@@ -1,3 +1,4 @@
+com\waltwang\maivc\pojo\MessageBody.class
 com\waltwang\maivc\pojo\ChatCompletion.class
 com\waltwang\maivc\domain\Userm.class
 com\waltwang\maivc\repository\UsermRepository.class
@@ -6,9 +7,8 @@ com\waltwang\maivc\controller\ChatController.class
 com\waltwang\maivc\pojo\ChatCompletion$Choice.class
 com\waltwang\maivc\pojo\ChatRequest.class
 com\waltwang\maivc\configuration\WebConfiguration.class
-com\waltwang\maivc\pojo\Message.class
+com\waltwang\maivc\pojo\MessageApi.class
 com\waltwang\maivc\pojo\ChatCompletion$Usage.class
 com\waltwang\maivc\repository\ConversationRepository.class
 com\waltwang\maivc\MaivcApplication.class
-com\waltwang\maivc\pojo\UsermMessageDTO.class
 com\waltwang\maivc\domain\Conversation.class
