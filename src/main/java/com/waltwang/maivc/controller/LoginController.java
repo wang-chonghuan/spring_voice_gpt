@@ -3,7 +3,6 @@ package com.waltwang.maivc.controller;
 import com.waltwang.maivc.security.AccountCredentials;
 import com.waltwang.maivc.security.JwtService;
 import lombok.extern.slf4j.Slf4j;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

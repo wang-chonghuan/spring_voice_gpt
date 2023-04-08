@@ -29,6 +29,9 @@ import java.util.Arrays;
  raw.JSON {"username":"user", "password":"1"}
  返回200 OK, body: 1
  headers看Authorization字段：Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VyIiwiZXhwIjoxNjgwOTAxODc0fQ.CA15bpG95yayhS0tbb-TMKYHmBO_ua3XmN_xGgJj6Eo
+
+ Error: Full authentication is required to access this resource
+ 部署之后，还报这个错，初步分析原因，是因为部署之后，访问根路径来访问前端，但是前端被保护了，所以根路径不能被保护
  */
 
 // 使用 @Configuration 和 @EnableWebSecurity 注解定义这个类作为配置类，并启用 Spring Security 的 Web 安全支持。
@@ -66,6 +69,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and().authorizeRequests()
                 // POST request to /login endpoint is not secured
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.GET, "/").permitAll()
+                .antMatchers("/**").permitAll()/*.antMatchers("/static/**").permitAll()这样写会有两个文件取不到*/
                 // All other requests are secured
                 .anyRequest().authenticated()
                 // 处理无权限的异常

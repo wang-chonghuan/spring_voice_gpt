@@ -20,7 +20,7 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtService {
     // 定义JWT令牌的过期时间，以毫秒为单位。这里设置为86400000毫秒，即24小时
-    static final long EXPIRATIONTIME = 86400000;
+    static final long EXPIRATIONTIME = 7200000;
     // 定义JWT令牌的前缀，通常在Authorization请求头中使用
     static final String PREFIX = "Bearer";
     // 生成一个用于签名和验证JWT令牌的密钥。在生产环境中，密钥应从应用程序配置文件中读取

@@ -4,5 +4,6 @@ spring:
 jwt:
     secret: 16xCExK5oRjE4+eyW7Q+SLNs0sVAq9uUGykyEp/FULA=
 openai:
-    apikey: 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
+    #在这里重新申请 https://platform.openai.com/account/api-keys
+    apikey: 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
     gpt3_5url: https://api.openai.com/v1/chat/completions
