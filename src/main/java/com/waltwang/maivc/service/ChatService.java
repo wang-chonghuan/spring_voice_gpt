@@ -13,6 +13,7 @@ import com.waltwang.maivc.repository.UsermRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -30,6 +31,12 @@ public class ChatService {
     private UsermRepository usermRepository;
     @Autowired
     private ConversationRepository conversationRepository;
+
+    @Value("${openai.apikey}")
+    private String apikey;
+
+    @Value("${openai.gpt3_5url}")
+    private String gpt3_5url;
 
     /**
      * 1. 从DB读取聊天记录
@@ -56,8 +63,8 @@ public class ChatService {
     private ResponseEntity<String> requestChatGPT(ChatRequest chatRequest) {
         // 获取url和key
         // 在这里重新申请 https://platform.openai.com/account/api-keys
-        String endpointUrl = "https://api.openai.com/v1/chat/completions";
-        String apiKey = "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";
+        String endpointUrl = gpt3_5url;
+        String apiKey = apikey;
         // 设置header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

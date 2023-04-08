@@ -6,15 +6,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -41,6 +39,18 @@ public class LoginController {
                 .header(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Authorization")
                 .contentType(MediaType.APPLICATION_JSON)
                 .build();
+    }
+
+    @RequestMapping(value="/validateToken", method=RequestMethod.POST)
+    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+        // Remove the "Bearer " prefix from the token
+        String jwtToken = token.replace("Bearer ", "");
+        boolean isValid = jwtService.validateToken(jwtToken);
+        if (isValid) {
+            return ResponseEntity.ok("Token is valid.");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid or expired.");
+        }
     }
 
 }

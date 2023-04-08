@@ -1,3 +1,8 @@
 spring:
     profiles:
         active: local
+jwt:
+    secret: 16xCExK5oRjE4+eyW7Q+SLNs0sVAq9uUGykyEp/FULA=
+openai:
+    apikey: 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
+    gpt3_5url: https://api.openai.com/v1/chat/completions

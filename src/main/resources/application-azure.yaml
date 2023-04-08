@@ -9,7 +9,7 @@ logging:
     root: INFO
 
 spring:
-  datasource:
+
 
   jpa:
     generate-ddl: true
