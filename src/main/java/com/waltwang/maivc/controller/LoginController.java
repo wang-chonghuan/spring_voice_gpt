@@ -1,5 +1,6 @@
 package com.waltwang.maivc.controller;
 
+import com.waltwang.maivc.repository.UsermRepository;
 import com.waltwang.maivc.security.AccountCredentials;
 import com.waltwang.maivc.security.JwtService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,9 +22,12 @@ public class LoginController {
     private JwtService jwtService;
 
     @Autowired
+    private UsermRepository usermRepository;
+
+    @Autowired
     AuthenticationManager authenticationManager;
 
-    @RequestMapping(value="/login", method=RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> getToken(@RequestBody AccountCredentials credentials) {
         UsernamePasswordAuthenticationToken creds =
                 new UsernamePasswordAuthenticationToken(credentials.getUsername(), credentials.getPassword());
@@ -40,13 +44,17 @@ public class LoginController {
                 .build();
     }
 
-    @RequestMapping(value="/validateToken", method=RequestMethod.POST)
-    public ResponseEntity<?> validateToken(@RequestHeader("Authorization") String token) {
+    @RequestMapping(value = "/validateToken", method = RequestMethod.POST)
+    public ResponseEntity<?> validateToken(
+            @RequestHeader("Authorization") String token,
+            @RequestBody AccountCredentials credentials) {
+
         // Remove the "Bearer " prefix from the token
         String jwtToken = token.replace("Bearer ", "");
         boolean isValid = jwtService.validateToken(jwtToken);
-        if (isValid) {
-            return ResponseEntity.ok("Token is valid.");
+        boolean isValidUsername = usermRepository.findByUsername(credentials.getUsername()).isPresent();
+        if (isValid && isValidUsername) {
+            return ResponseEntity.ok("Token and username are valid.");
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid or expired.");
         }
