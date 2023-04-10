@@ -1,3 +1,9 @@
 spring:
     profiles:
         active: local
+jwt:
+    secret: 16xCExK5oRjE4+eyW7Q+SLNs0sVAq9uUGykyEp/FULA=
+openai:
+    #在这里重新申请 https://platform.openai.com/account/api-keys
+    apikey_encrypted: c2stOWdLZ2FNd0NuYkpib2RkelJLVm9UM0JsYmtGSmlTVTNkVmI2Z1Q1MWtHcmxUNUs2
+    gpt3_5url: https://api.openai.com/v1/chat/completions

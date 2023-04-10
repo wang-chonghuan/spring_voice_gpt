@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waltwang.maivc.domain.Conversation;
 import com.waltwang.maivc.domain.Userm;
-import com.waltwang.maivc.pojo.ChatRequest;
 import com.waltwang.maivc.pojo.MessageApi;
 import com.waltwang.maivc.pojo.MessageBody;
 import com.waltwang.maivc.repository.ConversationRepository;
@@ -21,6 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 @Slf4j
@@ -31,12 +32,15 @@ public class ChatService {
     private UsermRepository usermRepository;
     @Autowired
     private ConversationRepository conversationRepository;
-
-    @Value("${openai.apikey}")
-    private String apikey;
-
     @Value("${openai.gpt3_5url}")
     private String gpt3_5url;
+    @Value("${openai.apikey_encrypted}")
+    private String apikey_encrypted;
+    private String apikey;
+    @PostConstruct
+    private void init() {
+        apikey = new String(Base64.getDecoder().decode(apikey_encrypted), StandardCharsets.UTF_8);
+    }
 
     /**
      * 1. 从DB读取聊天记录
@@ -48,7 +52,7 @@ public class ChatService {
     public MessageBody processUsermMessage(MessageBody msgBody) {
         // 1. 从DB读取聊天记录
         log.info("received msg: {}", msgBody.toString());
-        Conversation conversation = findConversation(msgBody.getUsermId(), msgBody.getSessionId());
+        Conversation conversation = findConversation(msgBody.getUsername(), msgBody.getSessionId());
         // 2. 把用户消息合并进聊天记录
         updateConversationByMessage(msgBody, conversation);
         // 3. 把新聊天记录发给gpt
@@ -63,34 +67,32 @@ public class ChatService {
     private ResponseEntity<String> requestChatGPT(ChatRequest chatRequest) {
         // 获取url和key
         String endpointUrl = gpt3_5url;
-        String apiKey = apikey;
         // 设置header
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setBearerAuth(apiKey);
+        headers.setBearerAuth(apikey);
         // 设置HttpEntity
         HttpEntity<ChatRequest> requestEntity = new HttpEntity<>(chatRequest, headers);
         log.info("requestBody: {}", requestEntity.toString());
         // 发送请求
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity = restTemplate.postForEntity(endpointUrl, requestEntity, String.class);
-        return responseEntity;
+        return restTemplate.postForEntity(endpointUrl, requestEntity, String.class);
     }
 
-    private Conversation findConversation(long usermId, String sessionId) {
-        Userm userm = usermRepository.findById(usermId).get();
-        Conversation conversation = conversationRepository.getOrCreateConversation(userm.getId(), sessionId);
-        return conversation;
+    private Conversation findConversation(String username, String sessionId) {
+        Userm userm = usermRepository.findByUsername(username).get();
+        return conversationRepository.getOrCreateConversation(userm.getId(), sessionId);
     }
 
     // 把当前收到的消息变成json,加入数据库里的聊天记录里，放到Conversation里，但是还没提交
     private void updateConversationByMessage(MessageBody msgBody, Conversation conversation) {
         // append json to json list
-        Map<String, Object> messages = conversation.getMessages();
-        List<Map<String, Object>> newMessageList = new ArrayList<>(
-                (List<Map<String, Object>>) messages.get("messages"));
-        newMessageList.add(new ObjectMapper().convertValue(msgBody, Map.class));
-        messages.put("messages", newMessageList);
+        var messages = conversation.getMessages();
+        var messageListWithNew = new ArrayList<>((List<Map<String, Object>>) messages.get("messages"));
+        var newMessage = msgBody.extractMessageStore(conversation.getUsermId());
+        var newMessageJson = new ObjectMapper().convertValue(newMessage, Map.class);
+        messageListWithNew.add(newMessageJson);
+        messages.put("messages", messageListWithNew);
     }
 
     // 从gpt-api返回的结构里取出MessageApi
@@ -111,7 +113,7 @@ public class ChatService {
     private MessageBody saveConversation(String responseBody, Conversation conversation, MessageBody sendMsgBody) {
         var msgApi = findMessageFromApi(responseBody);
         MessageBody recvMsgBody = new MessageBody(
-                sendMsgBody.getUsermId(),
+                sendMsgBody.getUsername(),
                 msgApi.getRole(),
                 msgApi.getContent(),
                 System.currentTimeMillis(),

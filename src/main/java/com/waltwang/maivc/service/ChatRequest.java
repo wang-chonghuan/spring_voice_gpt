@@ -1,7 +1,9 @@
-package com.waltwang.maivc.pojo;
+package com.waltwang.maivc.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.waltwang.maivc.domain.Conversation;
+import com.waltwang.maivc.pojo.MessageApi;
+import com.waltwang.maivc.pojo.MessageStore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -24,7 +26,7 @@ public class ChatRequest {
         // 上面取出来的格式其实是MessageBody，为了传给gpt-api，要转成MessageApi的格式
         for(var messageJson : messageList) {
             //! 如果Message是@Value,则这里会报错
-            MessageBody msgBody = new ObjectMapper().convertValue(messageJson, MessageBody.class);
+            MessageStore msgBody = new ObjectMapper().convertValue(messageJson, MessageStore.class);
             MessageApi msgApi = msgBody.extractMessageApi();
             this.messages.add(msgApi);
         }

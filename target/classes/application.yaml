@@ -5,5 +5,5 @@ jwt:
     secret: 16xCExK5oRjE4+eyW7Q+SLNs0sVAq9uUGykyEp/FULA=
 openai:
     #在这里重新申请 https://platform.openai.com/account/api-keys
-    apikey: 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
+    apikey_encrypted: c2stOWdLZ2FNd0NuYkpib2RkelJLVm9UM0JsYmtGSmlTVTNkVmI2Z1Q1MWtHcmxUNUs2
     gpt3_5url: https://api.openai.com/v1/chat/completions
