@@ -2,12 +2,13 @@ com\waltwang\maivc\pojo\MessageBody.class
 com\waltwang\maivc\pojo\ChatCompletion.class
 com\waltwang\maivc\domain\Userm.class
 com\waltwang\maivc\repository\UsermRepository.class
+com\waltwang\maivc\pojo\MessageStore.class
 com\waltwang\maivc\service\ChatService.class
 com\waltwang\maivc\controller\ChatController.class
 com\waltwang\maivc\pojo\ChatCompletion$Choice.class
 com\waltwang\maivc\security\UserDetailsServiceImpl.class
-com\waltwang\maivc\pojo\ChatRequest.class
 com\waltwang\maivc\security\AuthEntryPoint.class
+com\waltwang\maivc\service\ChatRequest.class
 com\waltwang\maivc\security\JwtService.class
 com\waltwang\maivc\security\SecurityConfig$NoOpPasswordEncoder.class
 com\waltwang\maivc\pojo\MessageApi.class

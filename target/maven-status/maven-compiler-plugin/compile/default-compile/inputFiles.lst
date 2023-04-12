@@ -7,11 +7,12 @@ C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\domain\Userm.j
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\domain\Conversation.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\repository\ConversationRepository.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\security\AuthenticationFilter.java
-C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\ChatRequest.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\service\ChatRequest.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\security\SecurityConfig.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\MessageApi.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\controller\ChatController.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\security\AuthEntryPoint.java
+C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\MessageStore.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\security\AccountCredentials.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\pojo\ChatCompletion.java
 C:\0dev\final\kidsgpt-proj\maivc\src\main\java\com\waltwang\maivc\security\JwtService.java
